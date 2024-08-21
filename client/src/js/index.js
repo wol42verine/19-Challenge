@@ -3,6 +3,7 @@ import Editor from './editor';
 import './database';
 import '../css/style.css';
 
+
 const main = document.querySelector('#main');
 main.innerHTML = '';
 
@@ -25,9 +26,11 @@ if (typeof editor === 'undefined') {
 
 // Check if service workers are supported
 if ('serviceWorker' in navigator) {
-  // register workbox service worker
-  const workboxSW = new Workbox('/src-sw.js');
-  workboxSW.register();
-} else {
-  console.error('Service workers are not supported in this browser.');
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/src-sw.js').then(registration => {
+      console.log('ServiceWorker registration successful with scope: ', registration.scope);
+    }, err => {
+      console.log('ServiceWorker registration failed: ', err);
+    });
+  });
 }

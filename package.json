@@ -4,12 +4,12 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start:dev": "",
-    "start": "",
-    "server": "",
-    "build": "",
-    "install": "",
-    "client": ""
+    "start:dev": "concurrently \"npm run server\" \"cd client && npm start\"",
+    "start": "concurrently \"npm run server\" \"cd client && npm start\"",
+    "server": "nodemon server/server.js",
+    "build": "webpack --config client/webpack.config.js",
+    "install": "cd server && npm install && cd ../client && npm install",
+    "client": "cd client && npm start"
   },
   "keywords": [],
   "author": "",

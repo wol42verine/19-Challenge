@@ -2,10 +2,13 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 const { InjectManifest } = require('workbox-webpack-plugin');
 const path = require('path');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-module.exports = () => {
+module.exports = (env, argv) => {
+  const isProduction = argv.mode === 'production';
+
   return {
-    mode: 'development',
+    mode: isProduction ? 'production' : 'development',
     entry: {
       main: './src/js/index.js',
       install: './src/js/install.js'
@@ -18,10 +21,6 @@ module.exports = () => {
       new HtmlWebpackPlugin({
         template: './index.html',
       }),
-      new InjectManifest({
-        swSrc: './src-sw.js',
-        swDest: 'service-worker.js',
-      }),
       new WebpackPwaManifest({
         name: 'Just Another Text Editor',
         short_name: 'JATE',
@@ -30,12 +29,23 @@ module.exports = () => {
         theme_color: '#31a9e1',
         start_url: '/',
         publicPath: '/',
+        display: 'standalone',
         icons: [
           {
-            src: path.resolve('src/images/icon.png'),
+            src: path.resolve(__dirname, 'src/images/logo.png'),
             sizes: [96, 128, 192, 256, 384, 512],
+            type: 'image/png',
             destination: path.join('assets', 'icons'),
           },
+        ],
+      }),
+      new InjectManifest({
+        swSrc: './src-sw.js',
+        swDest: 'service-worker.js',
+      }),
+      new CopyWebpackPlugin({
+        patterns: [
+          { from: 'manifest.json', to: 'manifest.json' },
         ],
       }),
     ],
@@ -56,6 +66,9 @@ module.exports = () => {
           },
         },
       ],
+    },
+    optimization: {
+      runtimeChunk: 'single',
     },
   };
 };

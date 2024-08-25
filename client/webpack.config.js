@@ -10,8 +10,8 @@ module.exports = (env, argv) => {
   return {
     mode: isProduction ? 'production' : 'development',
     entry: {
-      main: './src/js/index.js',
-      install: './src/js/install.js'
+      main: './client/src/js/index.js', // Correct path
+      install: './client/src/js/install.js' // Correct path
     },
     output: {
       filename: '[name].bundle.js',
@@ -19,7 +19,9 @@ module.exports = (env, argv) => {
     },
     plugins: [
       new HtmlWebpackPlugin({
-        template: './index.html',
+        template: './client/index.html',
+        filename: 'index.html',
+
       }),
       new WebpackPwaManifest({
         name: 'Just Another Text Editor',
@@ -40,14 +42,15 @@ module.exports = (env, argv) => {
         ],
       }),
       new InjectManifest({
-        swSrc: './src-sw.js',
+        swSrc: './client/src-sw.js',
         swDest: 'service-worker.js',
       }),
       new CopyWebpackPlugin({
         patterns: [
-          { from: 'manifest.json', to: 'manifest.json' },
-        ],
-      }),
+          { from: 'client/src/images', to: 'images' }
+        ]
+      })
+      
     ],
     module: {
       rules: [
@@ -64,6 +67,10 @@ module.exports = (env, argv) => {
               presets: ['@babel/preset-env'],
             },
           },
+        },
+        {
+          test: /\.(png|svg|jpg|jpeg|gif)$/i,
+          type: 'asset/resource',
         },
       ],
     },

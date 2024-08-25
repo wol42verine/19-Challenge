@@ -3,15 +3,15 @@
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
-  "scripts": {
-    "start:dev": "concurrently \"npm run server\" \"cd client && npm run dev\"",
-    "start": "concurrently \"npm run server\" \"cd client && npm start\"",
-    "server": "nodemon server/server.js",
-    "build": "webpack --config client/webpack.config.js",
-    "install": "cd server && npm install && cd ../client && npm install",
-    "client": "cd client && npm start",
-    "dev": "cd client && npm run dev"
-  },
+"scripts": {
+  "start:dev": "npx concurrently \"npm run server\" \"cd client && npm run dev\"",
+  "start": "npx concurrently \"npm run server\" \"cd client && npm start\"",
+  "server": "nodemon server/server.js",
+  "build": "webpack --config client/webpack.config.js",
+  "install": "cd server && npm install && cd ../client && npm install",
+  "client": "cd client && npm start",
+  "dev": "cd client && npm run dev"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",

@@ -8,10 +8,10 @@ module.exports = (env, argv) => {
   const isProduction = argv.mode === 'production';
 
   return {
-    mode: isProduction ? 'production' : 'development',
+    mode: 'development',
     entry: {
-      main: './client/src/js/index.js', // Correct path
-      install: './client/src/js/install.js' // Correct path
+      main: './src/js/index.js', // Correct path
+      install: './src/js/install.js' // Correct path
     },
     output: {
       filename: '[name].bundle.js',
@@ -19,37 +19,37 @@ module.exports = (env, argv) => {
     },
     plugins: [
       new HtmlWebpackPlugin({
-        template: './client/index.html',
-        filename: 'index.html',
-
+        template: './index.html',
+title: 'JATE',
       }),
       new WebpackPwaManifest({
         name: 'Just Another Text Editor',
+        fingerprints: false,
+        inject: true,
         short_name: 'JATE',
         description: 'A simple text editor that works offline',
         background_color: '#ffffff',
         theme_color: '#31a9e1',
         start_url: '/',
         publicPath: '/',
-        display: 'standalone',
         icons: [
           {
-            src: path.resolve(__dirname, 'src/images/logo.png'),
+            src: path.resolve('./src/images/logo.png'),
             sizes: [96, 128, 192, 256, 384, 512],
-            type: 'image/png',
+            
             destination: path.join('assets', 'icons'),
           },
         ],
       }),
       new InjectManifest({
-        swSrc: './client/src-sw.js',
-        swDest: 'service-worker.js',
+        swSrc: './src-sw.js',
+        swDest: 'src-sw.js',
       }),
-      new CopyWebpackPlugin({
-        patterns: [
-          { from: 'client/src/images', to: 'images' }
-        ]
-      })
+      // new CopyWebpackPlugin({
+      //   patterns: [
+      //     { from: 'src/images', to: 'images' }
+      //   ]
+      // })
       
     ],
     module: {
@@ -65,17 +65,18 @@ module.exports = (env, argv) => {
             loader: 'babel-loader',
             options: {
               presets: ['@babel/preset-env'],
+              plugins: ['@babel/plugin-proposal-object-rest-spread', "@babel/transform-runtime"],
             },
           },
         },
-        {
-          test: /\.(png|svg|jpg|jpeg|gif)$/i,
-          type: 'asset/resource',
-        },
+        // {
+        //   test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        //   type: 'asset/resource',
+        // },
       ],
     },
-    optimization: {
-      runtimeChunk: 'single',
-    },
+    // optimization: {
+    //   runtimeChunk: 'single',
+    // },
   };
 };

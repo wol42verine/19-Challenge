@@ -9,7 +9,7 @@ export default class {
       throw new Error('CodeMirror is not loaded');
     }
 
-    this.editor = CodeMirror(document.querySelector('#editor'), {
+    this.editor = CodeMirror(document.querySelector('#main'), {
       value: localData || '',
       mode: 'javascript',
       theme: 'monokai',
